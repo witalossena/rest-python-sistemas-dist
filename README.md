@@ -13,3 +13,5 @@
  `exit()`    
 
 
+**Rode o arquivo api_routes.py e abra no navegar a url: http://127.0.0.1:5000/users**
+

@@ -36,6 +36,8 @@ users_schema = UserSchema(many=True)
 class UserListResource(Resource):
     def get(self):
         users = User.query.all()
+        if users == []:
+            return "0 usuarios cadastrados"           
         return users_schema.dump(users)
 
     def post(self):
