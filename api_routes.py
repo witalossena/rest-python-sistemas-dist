@@ -1,16 +1,15 @@
-from flask import Flask, request  
+from flask import Flask, request, render_template, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api, Resource
-from flask_marshmallow import Marshmallow 
-
+from flask_marshmallow import Marshmallow
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///api.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-api = Api(app)  
-ma = Marshmallow(app) 
+api = Api(app)
+ma = Marshmallow(app)
 
 
 class User(db.Model):
@@ -34,15 +33,17 @@ users_schema = UserSchema(many=True)
 
 
 class UserListResource(Resource):
+    # method GET  url: http://127.0.0.1:5000/users
     def get(self):
         users = User.query.all()
         if users == []:
-            return "0 usuarios cadastrados"           
+            return "0 usuarios cadastrados"
         return users_schema.dump(users)
 
+    # method POST  url: http://127.0.0.1:5000/users
     def post(self):
         name = request.form['name']
-        email = request.form['email'] 
+        email = request.form['email']
         new_user = User(
             name=name,
             email=email
@@ -50,6 +51,7 @@ class UserListResource(Resource):
         db.session.add(new_user)
         db.session.commit()
         return user_schema.dump(new_user)
+
 
 api.add_resource(UserListResource, '/users')
 
@@ -72,9 +74,32 @@ class UserResource(Resource):
         user = User.query.get_or_404(id)
         db.session.delete(user)
         db.session.commit()
-        return '', 204    
+        return '', 204
+
 
 api.add_resource(UserResource, '/users/<int:id>')
+
+
+class TemplateRenderResourceInParams(Resource):
+    def get(self,name="witalo", bgColor="red" ):   
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template('index.html', name=name, bgColor=bgColor), 200, headers)
+
+api.add_resource(TemplateRenderResourceInParams, '/home/<name>/<bgColor>')
+
+
+
+class TemplateRenderResourceInPost(Resource):
+    def post(self):
+        name=request.form['nome']
+        bgColor=request.form['cor']
+        bodyColor=request.form['fundo']
+        headers = {'Content-Type': 'text/html'}
+        return make_response( render_template('index.html', name=name, bgColor=bgColor, bodyColor=bodyColor), 200, headers)     
+
+api.add_resource(TemplateRenderResourceInPost, '/home')
+
+
 
 
 if __name__ == '__main__':
