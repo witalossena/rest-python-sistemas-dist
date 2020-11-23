@@ -7,6 +7,25 @@
     <title>Api sist. Dist Python</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        function startTime() {
+          var today = new Date();
+          var h = today.getHours();
+          var m = today.getMinutes();
+          var s = today.getSeconds();
+          m = checkTime(m);
+          s = checkTime(s);
+          document.getElementById('txt').innerHTML =
+          h + ":" + m + ":" + s;
+          var t = setTimeout(startTime, 500);
+        }
+        function checkTime(i) {
+          if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
+    </script>
+   
+    
     <style type="text/css">
         html{
             font-family: 'Open Sans', sans-serif;
@@ -26,8 +45,10 @@
     </style>
 
 </head>
-<body class={{bodyColor}}>
+<body class={{bodyColor}} onload="startTime()">
     <h1 class={{bgColor}}>Hello {{ name }}!</h1>   
-</body>
 
+    <div id="txt"></div>
+
+</body>
 </html>

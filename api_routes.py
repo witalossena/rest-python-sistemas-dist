@@ -81,23 +81,127 @@ api.add_resource(UserResource, '/users/<int:id>')
 
 
 class TemplateRenderResourceInParams(Resource):
-    def get(self,name="witalo", bgColor="red" ):   
-        headers = {'Content-Type': 'text/html'}
-        return make_response(render_template('index.html', name=name, bgColor=bgColor), 200, headers)
+    def get(self):  
+        dict_args = request.args
+        with open('templates/dynamic_page.html', 'w') as file:
+            file.write(
+                f'''
+                    <!DOCTYPE html>
+                        <html lang="pt-BR">
 
-api.add_resource(TemplateRenderResourceInParams, '/home/<name>/<bgColor>')
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Api sist. Dist Python</title>
+                                <link rel="preconnect" href="https://fonts.gstatic.com">
+                                <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+                                <script>
+                                    function startTime() {{
+                                        var today = new Date();
+                                        var h = today.getHours();
+                                        var m = today.getMinutes();
+                                        var s = today.getSeconds();
+                                        m = checkTime(m);
+                                        s = checkTime(s);
+                                        document.getElementById('txt').innerHTML =
+                                        h + ":" + m + ":" + s;
+                                        var t = setTimeout(startTime, 500);
+                                    }}
+                                    function checkTime(i) {{
+                                        if (i < 10) {{i = "0" + i}};  // add zero in front of numbers < 10
+                                        return i;
+                                    }}
+                                </script>
+
+
+                                <style type="text/css">
+                                    html{{
+                                        font-family: 'Open Sans', sans-serif;
+                                    }}
+
+                                    
+                                </style>
+
+                            </head>
+                                <body onload="startTime()" style="background-color: { dict_args['fundo'] }"">
+                                    <div>
+                                       <h1 style="background-color: { dict_args['cor'] }">Hello, { dict_args['nome'] }!</h1>
+                                        <p> Your request is coming from: {request.headers.get('User-Agent')}</p>
+                                        <p> Your default language is: {request.accept_languages[0][0]}
+                                        <p> Your ipaddress is: {request.remote_addr}</p>
+                                    </div>
+                                </body>
+                        </html>
+                '''
+            )
+        
+        headers = {'Content-Type': 'text/html'}
+
+        return make_response (render_template('dynamic_page.html'), 200, headers)
+
+api.add_resource(TemplateRenderResourceInParams, '/api')
 
 
 
 class TemplateRenderResourceInPost(Resource):
     def post(self):
-        name=request.form['nome']
-        bgColor=request.form['cor']
-        bodyColor=request.form['fundo']
-        headers = {'Content-Type': 'text/html'}
-        return make_response( render_template('index.html', name=name, bgColor=bgColor, bodyColor=bodyColor), 200, headers)     
+        with open('templates/dynamic_page.html', 'w') as file:
+            file.write(
+                f'''
+                    <!DOCTYPE html>
+                        <html lang="pt-BR">
 
-api.add_resource(TemplateRenderResourceInPost, '/home')
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>POST REQUEST</title>
+                                <link rel="preconnect" href="https://fonts.gstatic.com">
+                                <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+                                <script>
+                                    function startTime() {{
+                                        var today = new Date();
+                                        var h = today.getHours();
+                                        var m = today.getMinutes();
+                                        var s = today.getSeconds();
+                                        m = checkTime(m);
+                                        s = checkTime(s);
+                                        document.getElementById('txt').innerHTML =
+                                        h + ":" + m + ":" + s;
+                                        var t = setTimeout(startTime, 500);
+                                    }}
+                                    function checkTime(i) {{
+                                        if (i < 10) {{i = "0" + i}};  // add zero in front of numbers < 10
+                                        return i;
+                                    }}
+                                </script>
+
+
+                                <style type="text/css">
+                                    html{{
+                                        font-family: 'Open Sans', sans-serif;
+                                    }}
+
+                                    
+                                </style>
+
+                            </head>
+                                <body style="background-color: { request.form['fundo'] }" onload="startTime()">
+                                    <div>
+                                        <h1 style="background-color: { request.form['cor'] }">Hello, { request.form['nome'].capitalize() }!</h1>
+                                        <p> Your request is coming from: {request.headers.get('User-Agent')}</p>
+                                        <p> {'Your Default Language is: ' + request.accept_languages if 'Postman' not in request.headers.get('User-Agent') else ''}</p>
+                                        <p> Your ipaddress is: {request.remote_addr}</p>
+                                    </div>
+                                </body>
+                        </html>
+                '''
+            )
+        
+        headers = {'Content-Type': 'text/html'}
+
+        return make_response (render_template('dynamic_page.html'), 200, headers)
+
+api.add_resource(TemplateRenderResourceInPost, '/api')
 
 
 
