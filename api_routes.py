@@ -79,6 +79,12 @@ class UserResource(Resource):
 
 api.add_resource(UserResource, '/users/<int:id>')
 
+class homeRender(Resource):
+    def get(self):
+        return make_response(render_template('index.html'), 200)
+
+api.add_resource(homeRender, '/')
+
 
 class TemplateRenderResourceInParams(Resource):
     def get(self):  
@@ -197,8 +203,6 @@ class TemplateRenderResourceInPost(Resource):
         return make_response (render_template('dynamic_page.html'), 200, headers)
 
 api.add_resource(TemplateRenderResourceInPost, '/api')
-
-
 
 
 if __name__ == '__main__':
