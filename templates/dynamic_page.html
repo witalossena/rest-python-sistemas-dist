@@ -16,8 +16,7 @@
                                         var s = today.getSeconds();
                                         m = checkTime(m);
                                         s = checkTime(s);
-                                        document.getElementById('txt').innerHTML =
-                                        h + ":" + m + ":" + s;
+                                        document.getElementById('txt').innerHTML = "Your region's time is: " + h + ":" + m + ":" + s;
                                         var t = setTimeout(startTime, 500);
                                     }
                                     function checkTime(i) {
@@ -42,6 +41,7 @@
                                         <p> Your request is coming from: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36 Edg/87.0.664.41</p>
                                         <p> Your default language is: en-US
                                         <p> Your ipaddress is: 127.0.0.1</p>
+                                        <p id="txt"></p>
                                     </div>
                                 </body>
                         </html>

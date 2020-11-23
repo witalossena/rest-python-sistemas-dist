@@ -103,8 +103,7 @@ class TemplateRenderResourceInParams(Resource):
                                         var s = today.getSeconds();
                                         m = checkTime(m);
                                         s = checkTime(s);
-                                        document.getElementById('txt').innerHTML =
-                                        h + ":" + m + ":" + s;
+                                        document.getElementById('txt').innerHTML = "Your region's time is: " + h + ":" + m + ":" + s;
                                         var t = setTimeout(startTime, 500);
                                     }}
                                     function checkTime(i) {{
@@ -112,16 +111,11 @@ class TemplateRenderResourceInParams(Resource):
                                         return i;
                                     }}
                                 </script>
-
-
                                 <style type="text/css">
                                     html{{
                                         font-family: 'Open Sans', sans-serif;
                                     }}
-
-                                    
                                 </style>
-
                             </head>
                                 <body onload="startTime()" style="background-color: { dict_args['fundo'] }"">
                                     <div>
@@ -129,6 +123,7 @@ class TemplateRenderResourceInParams(Resource):
                                         <p> Your request is coming from: {request.headers.get('User-Agent')}</p>
                                         <p> Your default language is: {request.accept_languages[0][0]}
                                         <p> Your ipaddress is: {request.remote_addr}</p>
+                                        <p id="txt"></p>
                                     </div>
                                 </body>
                         </html>
@@ -165,8 +160,7 @@ class TemplateRenderResourceInPost(Resource):
                                         var s = today.getSeconds();
                                         m = checkTime(m);
                                         s = checkTime(s);
-                                        document.getElementById('txt').innerHTML =
-                                        h + ":" + m + ":" + s;
+                                        document.getElementById('txt').innerHTML = "Your region's time is: " + h + ":" + m + ":" + s;
                                         var t = setTimeout(startTime, 500);
                                     }}
                                     function checkTime(i) {{
@@ -191,6 +185,7 @@ class TemplateRenderResourceInPost(Resource):
                                         <p> Your request is coming from: {request.headers.get('User-Agent')}</p>
                                         <p> {'Your Default Language is: ' + request.accept_languages if 'Postman' not in request.headers.get('User-Agent') else ''}</p>
                                         <p> Your ipaddress is: {request.remote_addr}</p>
+                                        <p id="txt"></p>
                                     </div>
                                 </body>
                         </html>
