@@ -1,1 +1,1 @@
-web: python api_routes.py
+web: gunicorn app:app
